@@ -19,7 +19,9 @@ Detailed instructions for Livesplit.Server and VirtualCam are below the quick se
 
 2. Open PowerShell (Windows) or the Terminal (Mac/Linux) and type `pip install loadstar`
 
-3. Type `python -m loadstar` to start the program!
+3. Type `loadstar` to start the program!
+
+(Note: if you get a "not found" error, try `python -m loadstar` instead - it may be your scripts folder is not on the system path)
 
 ### Running in future
 
@@ -27,7 +29,9 @@ Detailed instructions for Livesplit.Server and VirtualCam are below the quick se
 
 2. Open PowerShell (Windows) or the Terminal (Mac/Linux)
 
-3. Type `python -m loadstar` to start the program!
+3. Type `loadstar` to start the program!
+
+(Note: if you get a "not found" error, try `python -m loadstar` instead - it may be your scripts folder is not on the system path)
 
 ### Detailed
 
