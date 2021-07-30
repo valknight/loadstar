@@ -1,4 +1,3 @@
-import numpy as np
 import cv2
 import livesplit
 import click
@@ -55,7 +54,7 @@ class Cookstar():
             except NoMoreCamerasException:
                 # TODO: Replace with logging!
                 click.echo(
-                    "No more cameras! Quitting. Check OBS virtualcam is working right.")
+                    "No more cameras! Quitting. Check OBS VirtualCam is working right.")
                 cv2.destroyAllWindows()
                 sys.exit(1)
         return self._cam
