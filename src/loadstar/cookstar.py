@@ -2,10 +2,10 @@ import cv2
 import livesplit
 import click
 import sys
-from fps import FPSCounter
-from console import ConsoleUI
-from camera import CamFinder, NoMoreCamerasException
-from analysis import checkIfLoading
+from loadstar.fps import FPSCounter
+from loadstar.console import ConsoleUI
+from loadstar.camera import CamFinder, NoMoreCamerasException
+from loadstar.analysis import checkIfLoading
 
 
 class Cookstar():
