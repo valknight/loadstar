@@ -1,0 +1,4 @@
+livesplit
+opencv-python
+click
+numpy
