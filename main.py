@@ -67,7 +67,6 @@ class Cookstar():
         self.cam.release()  # release capture, to be nice!
         self._cam = None
 
-    def startLoop()
     def loop(self):
         self.fps.start()
         self.ui.loop(self.loading, self.fps.framerate,
