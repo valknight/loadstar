@@ -67,6 +67,8 @@ class Cookstar():
         self._cam = None
 
     def loop(self):
+        """Main camera loop
+        """
         self.fps.start()
         self.ui.loop(self.loading, self.fps.framerate,
                      self.loadingColour, self.frameInterval)
