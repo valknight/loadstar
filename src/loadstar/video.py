@@ -23,6 +23,7 @@ class VideoAnalyser():
         self.length = int(self.video.get(cv2.CAP_PROP_FRAME_COUNT))
         self._fourcc = cv2.VideoWriter_fourcc(*"MJPG")
         self.writer = cv2.VideoWriter("{}-loadless.avi".format(path), cv2.VideoWriter_fourcc(*"MJPG"), fps, (640,360))
+        self.loadingFrames = 0
 
     @property
     def nextFrame(self):
@@ -34,7 +35,7 @@ class VideoAnalyser():
 
     def checkNextFrame(self):
         frame, color = self.nextFrame
-        return not(checkIfLoading(frame, 5, 0, 10, BoundingBox((640, 0), (1000, 500)))), color
+        return not(checkIfLoading(frame, 5, 0, 10, BoundingBox((100, 100), (300, 300)))), color
 
     def loop(self):
         if self.currentFrame >= self.length:
@@ -44,13 +45,18 @@ class VideoAnalyser():
         if a:
             b = cv2.resize(b, (640,360))
             self.writer.write(b.astype('uint8'))
+        else:
+            self.loadingFrames += 1
         return True
 
     def convert(self):
-        hibernate = False
+        hibernate = True
+        if hibernate:
+            print("Hibernation is on! We'll hibernate your PC once this is complete. Turn off your monitor, and go take a nap :)")
         print("Starting to convert file...")
         with click.progressbar(range(0,self.length), show_pos=True) as bar:
             for a in bar:
+                bar.label = "removed {} loading frames".format(self.loadingFrames)
                 v.loop()
         if hibernate:
             print("Done! Hibernating PC - see you in the morning!")
