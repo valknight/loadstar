@@ -18,6 +18,7 @@ class VideoAnalyser():
         :param box: bounding box of pixels we want to analyse. if default of none, entire frame is analysed.
         :type box: BoundingBox, optional
         """
+        self.box = box
         self.currentFrame = 1
         self.video = cv2.VideoCapture(path)
         fps = self.video.get(cv2.CAP_PROP_FPS)
@@ -37,7 +38,7 @@ class VideoAnalyser():
 
     def checkNextFrame(self):
         frame, color = self.nextFrame
-        return not(checkIfLoading(frame, 5, 0, 10, BoundingBox((100, 100), (300, 300)))), color
+        return not(checkIfLoading(frame, 2, 0, 10, box=self.box)), color
 
     def loop(self):
         if self.currentFrame >= self.length:
@@ -53,19 +54,19 @@ class VideoAnalyser():
 
     def convert(self):
         print("Starting to convert file...")
-        with click.progressbar(range(0,self.length), show_pos=True) as bar:
+        with click.progressbar(range(0,self.length), show_pos=True, show_percent=True) as bar:
             for a in bar:
                 bar.label = "removed {} loading frames".format(self.loadingFrames)
                 self.loop()
-        click.echo('Success! Check file at {}-loadless.mp4 :)'.format(self.filename))
+        click.echo('Success! Check file at {} :)'.format(self.filename))
         click.echo('If you want to avoid this in future, considering setting up LoadStar with a live video input - we integrate with LiveSplit!')
 
 def resetToMax(v, min: int, max: int, message: str, reset: int):
-    if v <= min or v >= max:
+    if v < min or v > max:
         click.echo(message, color='red')
         click.echo(message='Resetting to {}'.format(reset), color='red')
         v = reset
-    return reset
+    return v
 
 def getLarger(x, y):
     if x >= y:
@@ -74,26 +75,25 @@ def getLarger(x, y):
 
 @click.command()
 @click.option('--path', prompt='Path to file to remove loads from:', help='Path to the Cookstar VOD to remove loads from')
-@click.option('--minX', default=0, help='left most X boundary you want to scan pixels from. measured from 0 -> 1280 (input frames will be resized)')
-@click.option('--maxX', default=1280, help='right most X boundary you want to scan pixels up to measured from 0 -> 1280 (input frames will be resized)')
-@click.option('--minY', default=0, help='The top most y boundary you wish to scan pixels from measured from 0 -> 720 (input frames will be resized)')
-@click.option('--maxY', default=0, help='The bottom most y boundary you wish to scan pixels up to measured from 0 -> 720 (input frames will be resized)')
-def startScan(path: str, minx: int, maxx: int, miny: int, maxy: int):
-    minX = resetToMax(minx, 0, 1280, "minX must be between 0 and 1280", 0)
-    maxX = resetToMax(maxx, 0, 1280, "maxX must be between 0 and 1280", 1280)
-    minY = resetToMax(miny, 0, 720, "minY must be between 0 and 1280", 0)
-    maxY = resetToMax(maxy, 0, 720, "maxY must be between 0 and 1280", 720)
-    print(path)
-    if getLarger(minX, maxX) == minX:
-        click.echo("minX must be smalelr than maxX")
+@click.option('--min_x', default=0, help='left most X boundary you want to scan pixels from. measured from 0 -> 1280 (input frames will be resized)')
+@click.option('--max_x', default=1280, help='right most X boundary you want to scan pixels up to measured from 0 -> 1280 (input frames will be resized)')
+@click.option('--min_y', default=0, help='The top most y boundary you wish to scan pixels from measured from 0 -> 720 (input frames will be resized)')
+@click.option('--max_y', default=720, help='The bottom most y boundary you wish to scan pixels up to measured from 0 -> 720 (input frames will be resized)')
+def startScan(path: str, min_x: int, max_x: int, min_y: int, max_y: int):
+    min_x = resetToMax(min_x, 0, 1280, "min_x must be between 0 and 1280", 0)
+    max_x = resetToMax(max_x, 0, 1280, "max_x must be between 0 and 1280", 1280)
+    min_y = resetToMax(min_y, 0, 720, "min_y must be between 0 and 1280", 0)
+    max_y = resetToMax(max_y, 0, 720, "max_y must be between 0 and 1280", 720)
+    if getLarger(min_x, max_x) == min_x:
+        click.echo("min_x must be smalelr than max_x")
         sys.exit(1)
-    if getLarger(minY, maxY) == minY:
-        click.echo("minY must be smalelr than maxY")
+    if getLarger(min_y, max_y) == min_y:
+        click.echo("min_y must be smalelr than max_y")
         sys.exit(1)
     if not(os.path.exists(path)):
         click.echo("Please ensure the file exists at path {}".format(path))
         sys.exit(1)
-    b = BoundingBox((minX, minY),(maxX, maxY))
+    b = BoundingBox((min_x, min_y),(max_x, max_y))
     v = VideoAnalyser(path, box=b)
     v.convert()
 
