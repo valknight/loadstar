@@ -101,7 +101,6 @@ class Cookstar():
             self.lastCheckLoad = self.loading
             self.loading = checkIfLoading(
                 grayVersion, self.pixelsToSkip, self.loadingColour, self.colourRange)
-            frameTimer = 0
         if self.loading:
             self.livesplit.pauseGameTimer()
         else:
