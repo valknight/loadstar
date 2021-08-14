@@ -17,6 +17,7 @@ class Cookstar():
         self.loading = False
         self.ui = ConsoleUI()
         self.lastCheckLoad = False
+        self.frame = None
 
         # true black. reset this with "b" if your capture card is different.
         self.loadingColour = 0
@@ -55,8 +56,8 @@ class Cookstar():
                 # TODO: Replace with logging!
                 click.echo(
                     "No more cameras! Quitting. Check OBS VirtualCam is working right.")
-                cv2.destroyAllWindows()
-                sys.exit(1)
+                #cv2.destroyAllWindows()
+                #sys.exit(1)
         return self._cam
 
     def markCamAsBorked(self):
@@ -87,6 +88,7 @@ class Cookstar():
             # Delete the OG frame to save memory
             del frame
             preview = cv2.resize(grayVersion, (320, 180))
+            self.frame = preview
             cv2.imshow('Current loading colour {} with range {}'.format(
                 self.loadingColour, self.colourRange), preview)
             # Advance the frame counter!
@@ -94,6 +96,7 @@ class Cookstar():
             # if it worked, we're on a working camera!!!!!
             self.finder.currentCamWorking()
         except cv2.error:
+            self.frame = None
             print("Getting new camera!")
             self.markCamAsBorked()
             return
@@ -101,13 +104,15 @@ class Cookstar():
             self.lastCheckLoad = self.loading
             self.loading = checkIfLoading(
                 grayVersion, self.pixelsToSkip, self.loadingColour, self.colourRange)
-        if self.loading:
-            self.livesplit.pauseGameTimer()
-        else:
-            self.livesplit.startGameTimer()
+        try:
+            if self.loading:
+                self.livesplit.pauseGameTimer()
+            else:
+                self.livesplit.startGameTimer()
+        except ConnectionRefusedError:
+            pass
+            #print("failed to connect to LiveSplit.server!")
         key = cv2.waitKey(1)
-        if key & 0xFF == ord('s'):
-            self.livesplit.startTimer()
         if key & 0xFF == ord('q'):
             self.markCamAsBorked()
             sys.exit(0)
@@ -131,8 +136,18 @@ class Cookstar():
             self.ui.forceToRender()
         self.fps.end()
 
-
-if __name__ == '__main__':
+def start(ds):
     cookstar = Cookstar()
     while True:
         cookstar.loop()
+        if cookstar.frame is not None:
+            ds['capturing'] = True
+            ds['frame'] =  cookstar.frame
+        else:
+            ds['capturing'] = False
+            ds['frame'] = None
+        ds['fps'] = cookstar.fps.framerate
+        ds['loading'] = cookstar.loading
+
+if __name__ == '__main__':
+    start()

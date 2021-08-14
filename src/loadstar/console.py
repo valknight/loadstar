@@ -13,6 +13,7 @@ class ConsoleUI():
 
     def loop(self, loading: bool, fps: int, loadingColour: int, frameInterval: int):
         self.displayFrame += 1
+        return
         if self.displayFrame >= self.display_interval:
             self.displayFrame = 0
             self.output(loading, fps, loadingColour, frameInterval)
@@ -32,7 +33,6 @@ class ConsoleUI():
         click.echo("press 'q' to quit")
         click.echo("press 'd' to go to the last camera ID")
         click.echo("press 'a' to go to the next camera")
-        click.echo("press 's' if you wish to start the timer here")
         click.echo("press 'o' to reduce the frame interval for accuracy")
         click.echo("press 'p' to increase the frame interval for performance")
         click.echo(
