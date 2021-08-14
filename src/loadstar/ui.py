@@ -1,10 +1,10 @@
 #Import necessary libraries
-from flask import Flask, render_template, Response, send_file, jsonify
+from flask import Flask, render_template, Response, send_file, jsonify, make_response
 import io
 import cv2
 
-#Initialize the Flask app
-app = Flask(__name__, template_folder='web')
+# create the Flask app
+app = Flask(__name__, template_folder='web', static_folder='web_static')
 
 ds = None
 
@@ -20,9 +20,15 @@ def stats():
 		'capturing': ds['capturing']
 	})
 
-@app.route('/log')
-def log():
+@app.route('/log.json')
+def logJSON():
 	return jsonify(ds['log'].output_dict)
+
+@app.route('/log.txt')
+def logTXT():
+		response = make_response(str(ds['log']), 200)
+		response.mimetype = "text/plain"
+		return response
 
 
 @app.route('/video')
