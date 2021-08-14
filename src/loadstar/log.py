@@ -9,15 +9,15 @@ class Severity(Enum):
 	DEBUG = 'DEBUG'
 
 def sevToStr(level: Severity):
-	if level = Severity.CRITICAL:
+	if level == Severity.CRITICAL:
 		return "CRITICAL"
-	if level = Severity.ERROR:
+	if level == Severity.ERROR:
 		return "ERROR"
-	if level = Severity.WARNING:
+	if level == Severity.WARNING:
 		return "WARNING"
-	if level = Severity.INFO:
+	if level == Severity.INFO:
 		return "INFO"
-	if level = Severity.DEBUG:
+	if level == Severity.DEBUG:
 		return "DEBUG"
 
 class Log():
