@@ -59,7 +59,7 @@ class Cookstar():
                 self._cam = self.finder.cam
             except NoMoreCamerasException:
                 # TODO: Replace with logging!
-                self.ds['log'].error("Ran out of cameras! Check OBS VirtualCam is working right.")
+                self.ds['log'] = self.ds['log'].error("Ran out of cameras! Check OBS VirtualCam is working right.")
                 #cv2.destroyAllWindows()
                 #sys.exit(1)
         return self._cam
@@ -102,7 +102,7 @@ class Cookstar():
             self.finder.currentCamWorking()
         except cv2.error:
             self.frame = None
-            self.ds['log'].info('Getting new camera!')
+            self.ds['log'] = self.ds['log'].info('Getting new camera!')
             self.markCamAsBorked()
             return
         if self.frameTimer >= self.frameInterval:
@@ -112,10 +112,17 @@ class Cookstar():
         try:
             if self.loading:
                 self.livesplit.pauseGameTimer()
+                self.ds['log'] = self.ds['log'].debug('pausing game timer')
             else:
                 self.livesplit.startGameTimer()
+                self.ds['log'] = self.ds['log'].debug('resuming game timer')
+            if not self.ds.get('livesplit_connected'):
+                self.ds['log'] = self.ds['log'].info('reconnected to livesplit!')
+            self.ds['livesplit_connected'] = True
         except ConnectionRefusedError:
-            self.ds['log'].warn("failed to connect to LiveSplit.server! Cannot pause - check it's running.")
+            if self.ds.get('livesplit_connected'):
+                self.ds['log'] = self.ds['log'].warn("failed to connect to LiveSplit.server! Cannot pause - check it's running.")
+                self.ds['livesplit_connected'] = False
         key = cv2.waitKey(1)
         # TODO: Replace with web commands!
         if key & 0xFF == ord('q'):
@@ -151,11 +158,11 @@ def start(ds):
         if cookstar.frame is not None:
             ds['capturing'] = True
             ds['frame'] =  cookstar.frame
-            ds['log'].debug("Saved frame to shared memory")
+            ds['log'] = ds['log'].debug("Saved frame to shared memory")
         else:
             ds['capturing'] = False
             ds['frame'] = None
-            ds['log'].debug("Could not get frame to put in shared memory!")
+            ds['log'] = ds['log'].debug("Could not get frame to put in shared memory!")
         ds['fps'] = cookstar.fps.framerate
         ds['loading'] = cookstar.loading
 

@@ -28,24 +28,25 @@ class Log():
 	
 	def log(self, message: str, level: Severity = Severity.INFO):
 		self.logQueue.append(Message(message, level = level))
+		return self
 	
 	def critical(self, message: str):
-		self.log(message, Severity.CRITICAL)
+		return self.log(message, Severity.CRITICAL)
 	
 	def error(self, message: str):
-		self.log(message, Severity.ERROR)
+		return self.log(message, Severity.ERROR)
 	
 	def warning(self, message: str):
-		self.log(message, Severity.WARNING)
+		return self.log(message, Severity.WARNING)
 	
 	def warn(self, message: str):
-		self.warning(message)
+		return self.warning(message)
 	
 	def info(self, message: str):
-		self.log(message, Severity.INFO)
+		return self.log(message, Severity.INFO)
 	
 	def debug(self, message: str):
-		self.log(message, Severity.DEBUG)
+		return self.log(message, Severity.DEBUG)
 	
 	@property
 	def output(self):
@@ -62,7 +63,11 @@ class Log():
 		return l
 	
 	def __str__(self):
-		return '\n'.join(self.output)
+		l = ''
+		for m in self.logQueue:
+			if m.level is not Severity.DEBUG:
+				l = '{}\n{}'.format(l, m)
+		return l
 
 
 class Message():

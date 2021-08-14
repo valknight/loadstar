@@ -14,6 +14,7 @@ if __name__ == '__main__':
     
     ds['hide_console'] = True
     ds['log'] = Log()
+    ds['livesplit_connected'] = True
     p_c.start()
     p_s.start()
     p_c.join()
