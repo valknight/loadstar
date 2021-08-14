@@ -20,6 +20,11 @@ def stats():
 		'capturing': ds['capturing']
 	})
 
+@app.route('/log')
+def log():
+	return jsonify(ds['log'].output_dict)
+
+
 @app.route('/video')
 def video():
 	return Response(gen(), mimetype='multipart/x-mixed-replace; boundary=frame')
