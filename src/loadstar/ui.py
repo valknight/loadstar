@@ -4,7 +4,7 @@ import io
 import cv2
 
 # create the Flask app
-app = Flask(__name__, template_folder='web', static_folder='web_static')
+app = Flask(__name__, template_folder='web', static_url_path="/static", static_folder='web_static')
 
 ds = None
 

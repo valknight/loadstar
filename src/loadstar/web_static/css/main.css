@@ -1,0 +1,36 @@
+
+body {
+	background-color: #70BBFD;
+	padding: 10
+}
+
+.cm {
+	font-family: 'Arial Rounded MT Bold', 'Arial', sans-serif;
+	color: #D23831;
+	font-size: 50px;
+	position: relative;
+	background: transparent;
+	z-index: 0;
+}
+
+.cm-medium {
+	font-size: 30px;
+}
+.cm-small {
+	font-size: 15px;
+}
+.cm:before {
+	content: attr(title);
+	position: absolute;
+	-webkit-text-stroke: 0.2em #fff; /* Chris Coyier's favorite color! */
+	left: 0;
+	z-index: -1;
+}
+/* add a double stroke */
+.cm:after {
+	content: attr(title);
+	position: absolute;
+	-webkit-text-stroke: 0.5em #F2BB4B;
+	left: 0;
+	z-index: -2;
+}
