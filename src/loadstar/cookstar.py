@@ -6,7 +6,7 @@ from loadstar.fps import FPSCounter
 from loadstar.console import ConsoleUI
 from loadstar.camera import CamFinder, NoMoreCamerasException
 from loadstar.analysis import checkIfLoading
-from loadstar.log import Severity
+from loadstar.log import Severity, Log
 
 
 class Cookstar():
@@ -20,6 +20,9 @@ class Cookstar():
         self.ui = ConsoleUI()
         self.lastCheckLoad = False
         self.frame = None
+        # Shim datastore - overwrite this if you have a proper one!
+        self.ds = dict()
+        self.ds['log'] = Log() 
 
         # true black. reset this with "b" if your capture card is different.
         self.loadingColour = 0
@@ -56,7 +59,7 @@ class Cookstar():
                 self._cam = self.finder.cam
             except NoMoreCamerasException:
                 # TODO: Replace with logging!
-                ds['log'].error("Ran out of cameras! Check OBS VirtualCam is working right.")
+                self.ds['log'].error("Ran out of cameras! Check OBS VirtualCam is working right.")
                 #cv2.destroyAllWindows()
                 #sys.exit(1)
         return self._cam
@@ -99,7 +102,7 @@ class Cookstar():
             self.finder.currentCamWorking()
         except cv2.error:
             self.frame = None
-            ds['log'].info('Getting new camera!')
+            self.ds['log'].info('Getting new camera!')
             self.markCamAsBorked()
             return
         if self.frameTimer >= self.frameInterval:
@@ -112,7 +115,7 @@ class Cookstar():
             else:
                 self.livesplit.startGameTimer()
         except ConnectionRefusedError:
-            ds['log'].warn("failed to connect to LiveSplit.server! Cannot pause - check it's running.")
+            self.ds['log'].warn("failed to connect to LiveSplit.server! Cannot pause - check it's running.")
         key = cv2.waitKey(1)
         # TODO: Replace with web commands!
         if key & 0xFF == ord('q'):
@@ -140,6 +143,7 @@ class Cookstar():
 
 def start(ds):
     cookstar = Cookstar()
+    cookstar.ds = ds
     if ds.get('hide_console', False):
         cookstar.console_enabled = False
     while True:
@@ -154,7 +158,6 @@ def start(ds):
             ds['log'].debug("Could not get frame to put in shared memory!")
         ds['fps'] = cookstar.fps.framerate
         ds['loading'] = cookstar.loading
-        ds['console'] = cookstar.log
 
 if __name__ == '__main__':
     start()
