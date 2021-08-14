@@ -1,22 +1,18 @@
-
-from loadstar.cookstar import Cookstar
-from threading import Thread
-from datetime import datetime
-import time
-
-c = Cookstar()
-def cStarLoop():
-    while True:
-        c.loop()
-
-cookstar_loop = Thread(target=cStarLoop)
-
-def second():
-    while True:
-        print(datetime.now().strftime("%H:%M:%S"))
-        time.sleep(1)
-s = Thread(target=second)
+import loadstar.cookstar
+import loadstar.ui
+from multiprocessing import Process, Manager
 
 if __name__ == '__main__':
-    s.start()
-    cookstar_loop.start()
+    
+    # create our Manager
+    manager = Manager()
+    # create our datastore
+    ds = manager.dict()
+    
+    p_c = Process(target = loadstar.cookstar.start, args = (ds, ))
+    p_s = Process(target = loadstar.ui.start, args = (ds, ))
+    
+    p_c.start()
+    p_s.start()
+    p_c.join()
+    
