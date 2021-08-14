@@ -8,10 +8,11 @@ if __name__ == '__main__':
     manager = Manager()
     # create our datastore
     ds = manager.dict()
-    
     p_c = Process(target = loadstar.cookstar.start, args = (ds, ))
     p_s = Process(target = loadstar.ui.start, args = (ds, ))
     
+    ds['hide_console'] = True
+    ds['console'] = []
     p_c.start()
     p_s.start()
     p_c.join()

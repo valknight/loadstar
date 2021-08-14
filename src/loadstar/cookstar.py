@@ -15,6 +15,7 @@ class Cookstar():
         self.fps = FPSCounter()
         self.finder = CamFinder()
         self.loading = False
+        self.console_enabled = True
         self.ui = ConsoleUI()
         self.lastCheckLoad = False
         self.frame = None
@@ -71,8 +72,9 @@ class Cookstar():
         """Main camera loop
         """
         self.fps.start()
-        self.ui.loop(self.loading, self.fps.framerate,
-                     self.loadingColour, self.frameInterval)
+        if self.console_enabled:
+            self.ui.loop(self.loading, self.fps.framerate,
+                         self.loadingColour, self.frameInterval)
         # Clamp frame interval
         # TODO: Refactor this into a dedicated clamp function!
         if self.frameInterval < 1:
@@ -138,6 +140,8 @@ class Cookstar():
 
 def start(ds):
     cookstar = Cookstar()
+    if ds.get('hide_console', False):
+        cookstar.console_enabled = False
     while True:
         cookstar.loop()
         if cookstar.frame is not None:

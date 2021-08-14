@@ -13,7 +13,6 @@ class ConsoleUI():
 
     def loop(self, loading: bool, fps: int, loadingColour: int, frameInterval: int):
         self.displayFrame += 1
-        return
         if self.displayFrame >= self.display_interval:
             self.displayFrame = 0
             self.output(loading, fps, loadingColour, frameInterval)
