@@ -6,6 +6,7 @@ from loadstar.fps import FPSCounter
 from loadstar.console import ConsoleUI
 from loadstar.camera import CamFinder, NoMoreCamerasException
 from loadstar.analysis import checkIfLoading
+from loadstar.log import Severity
 
 
 class Cookstar():
@@ -55,8 +56,7 @@ class Cookstar():
                 self._cam = self.finder.cam
             except NoMoreCamerasException:
                 # TODO: Replace with logging!
-                click.echo(
-                    "No more cameras! Quitting. Check OBS VirtualCam is working right.")
+                ds['log'].error("Ran out of cameras! Check OBS VirtualCam is working right.")
                 #cv2.destroyAllWindows()
                 #sys.exit(1)
         return self._cam
@@ -99,7 +99,7 @@ class Cookstar():
             self.finder.currentCamWorking()
         except cv2.error:
             self.frame = None
-            print("Getting new camera!")
+            ds['log'].info('Getting new camera!')
             self.markCamAsBorked()
             return
         if self.frameTimer >= self.frameInterval:
@@ -112,9 +112,9 @@ class Cookstar():
             else:
                 self.livesplit.startGameTimer()
         except ConnectionRefusedError:
-            pass
-            #print("failed to connect to LiveSplit.server!")
+            ds['log'].warn("failed to connect to LiveSplit.server! Cannot pause - check it's running.")
         key = cv2.waitKey(1)
+        # TODO: Replace with web commands!
         if key & 0xFF == ord('q'):
             self.markCamAsBorked()
             sys.exit(0)
@@ -147,11 +147,14 @@ def start(ds):
         if cookstar.frame is not None:
             ds['capturing'] = True
             ds['frame'] =  cookstar.frame
+            ds['log'].debug("Saved frame to shared memory")
         else:
             ds['capturing'] = False
             ds['frame'] = None
+            ds['log'].debug("Could not get frame to put in shared memory!")
         ds['fps'] = cookstar.fps.framerate
         ds['loading'] = cookstar.loading
+        ds['console'] = cookstar.log
 
 if __name__ == '__main__':
     start()

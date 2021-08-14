@@ -1,5 +1,6 @@
 import loadstar.cookstar
 import loadstar.ui
+from loadstar.log import Log
 from multiprocessing import Process, Manager
 
 if __name__ == '__main__':
@@ -12,7 +13,7 @@ if __name__ == '__main__':
     p_s = Process(target = loadstar.ui.start, args = (ds, ))
     
     ds['hide_console'] = True
-    ds['console'] = []
+    ds['log'] = Log()
     p_c.start()
     p_s.start()
     p_c.join()
