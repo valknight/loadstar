@@ -8,6 +8,18 @@ class Severity(Enum):
 	INFO = 'INFO'
 	DEBUG = 'DEBUG'
 
+def sevToStr(level: Severity):
+	if level = Severity.CRITICAL:
+		return "CRITICAL"
+	if level = Severity.ERROR:
+		return "ERROR"
+	if level = Severity.WARNING:
+		return "WARNING"
+	if level = Severity.INFO:
+		return "INFO"
+	if level = Severity.DEBUG:
+		return "DEBUG"
+
 class Log():
 	def __init__(self, maxLength = 5000):
 		self.maxLength = maxLength
@@ -26,6 +38,9 @@ class Log():
 	def warning(self, message: str):
 		self.log(message, Severity.WARNING)
 	
+	def warn(self, message: str):
+		self.warning(message)
+	
 	def info(self, message: str):
 		self.log(message, Severity.INFO)
 	
@@ -43,7 +58,7 @@ class Log():
 	def output_dict(self):
 		l = []
 		for m in self.logQueue:
-			l.append(m.toDict()))
+			l.append(m.toDict())
 		return l
 	
 	def __str__(self):
@@ -57,7 +72,7 @@ class Message():
 		self.time = datetime.now()
 	
 	def toDict(self):
-		return {'level': self.level, 'message': self.message, 'time': self.time}
+		return {'level': sevToStr(self.level), 'message': self.message, 'time': self.time}
 	
 	def __str__(self):
-		return "[{}] [{}] {}".format(self.time.strftime("%H:%M:%S"), self.level, self.message)
+		return "[{}] [{}] {}".format(self.time.strftime("%H:%M:%S"), sevToStr(self.level), self.message)
