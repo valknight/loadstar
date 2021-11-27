@@ -12,12 +12,14 @@ ds = None
 def index():
 	return render_template('index.html')
 
-@app.route('/stats')
+@app.route('/stats.json')
 def stats():
 	return jsonify({
 		'fps': ds['fps'],
 		'loading': ds['loading'],
-		'capturing': ds['capturing']
+		'capturing': ds['capturing'],
+		'frameInterval': ds['frameInterval'],
+		'loadingColour': ds['loadingColour']
 	})
 
 @app.route('/log.json')

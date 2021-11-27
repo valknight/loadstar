@@ -68,6 +68,7 @@ class Cookstar():
         """Does what it says on the tin - marks the current camera in use as not working, and will cause a new camera to be found next time .cam is requested
         Can also be used if you just... want a new camera!
         """
+        self.ds['log'] = self.ds['log'].warn('Camera {} was marked as borked. Releasing it!'.format(self.finder.camIndex))
         self.cam.release()  # release capture, to be nice!
         self._cam = None
 
@@ -155,6 +156,8 @@ def start(ds):
         cookstar.console_enabled = False
     while True:
         cookstar.loop()
+        if ds.get('frameInterval'):
+            cookstar.frameInterval = ds['frameInterval']
         if cookstar.frame is not None:
             ds['capturing'] = True
             ds['frame'] =  cookstar.frame
@@ -165,6 +168,8 @@ def start(ds):
             ds['log'] = ds['log'].debug("Could not get frame to put in shared memory!")
         ds['fps'] = cookstar.fps.framerate
         ds['loading'] = cookstar.loading
+        ds['frameInterval'] = cookstar.frameInterval
+        ds['loadingColour'] = cookstar.loadingColour
 
 if __name__ == '__main__':
-    start()
+    start(dict())

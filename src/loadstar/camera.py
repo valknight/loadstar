@@ -6,7 +6,7 @@ class NoMoreCamerasException(Exception):
 
 
 class CamFinder:
-    def __init__(self, camIndex=1) -> None:
+    def __init__(self, camIndex=0) -> None:
         self.camIndex = camIndex
         self.maxCams = 50
         self.camDirectionForward = True

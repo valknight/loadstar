@@ -11,10 +11,34 @@
     <hr>
     <div class="video-playback-container">
         <p class="cm cm-small" title="live preview">live preview</p>
-        <img src="{{ url_for('video') }}" width="100%">
+        <img id="player" src="#" width="100%">
     </div>
-    <div class="control-panel">
-
+    <div class="control-panel panel">
+        <h1 class="control-panel-header">control panel</h1>
+        <div class="net-display-box">
+            <ul>
+                <li><a class="control-panel-option" onclick="calibrate()" href="#">calibrate load</a></li>
+                <li><a class="control-panel-option" onclick="nextCam()" href="#">next camera</a></li>
+                <li><a class="control-panel-option" onclick="prevCam()" href="#">previous camera</a></li>
+                <li><a class="control-panel-option" onclick="lowerInterval()" href="#">lower frame interval</a></li>
+                <li><a class="control-panel-option" onclick="higherInterval()" href="#">higher frame interval</a></li>
+            </ul>
+            <b>some notes.</b>
+            <p>A frame interval of 2 is recommended for most users. Setting it too high might cause issues in detecting your loads!</p>
+            <p>You should also not have to calibrate your loads. Our default loading colour range is quite tolerant, and if you are not working on zero, you should potentially focus on calibrating your capture card instead.</p>
+            <p>However, the easiest way to calibrate if you have to is to take a screenshot of the loading image on your PS4/PS5, and then load this screenshot, and wait for the console's UI to hide itself. If it doesn't hide itself, you can always crop
+                the video in OBS.</p>
+            <p>Trying to calibrate on live gameplay may result in subpar load detection later, due the latency of the web interface potentially causing inaccurate black levels to be calibrated.</p>
+            <p>A good rule of thumb is that you've probably done it wrong if your <code>loadingColour</code> goes above 10.</p>
+        </div>
+    </div>
+    <div class="stats-panel panel">
+        <h1 class="control-panel-header">stats panel</h1>
+        <div id="stats-box" class="net-display-box"></div>
+    </div>
+    <div class="log-panel panel">
+        <h1 class="control-panel-header">log panel</h1>
+        <div id="log-box" class="net-display-box"></div>
     </div>
 
 </body>
