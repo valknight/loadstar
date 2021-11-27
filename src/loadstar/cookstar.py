@@ -112,10 +112,10 @@ class Cookstar():
         try:
             if self.loading:
                 self.livesplit.pauseGameTimer()
-                self.ds['log'] = self.ds['log'].debug('pausing game timer')
+                self.ds['log'] = self.ds['log'].info('pausing game timer')
             else:
                 self.livesplit.startGameTimer()
-                self.ds['log'] = self.ds['log'].debug('resuming game timer')
+                self.ds['log'] = self.ds['log'].info('resuming game timer')
             if not self.ds.get('livesplit_connected'):
                 self.ds['log'] = self.ds['log'].info('reconnected to livesplit!')
             self.ds['livesplit_connected'] = True

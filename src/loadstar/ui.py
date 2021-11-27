@@ -30,6 +30,9 @@ def logTXT():
 		response.mimetype = "text/plain"
 		return response
 
+@app.route('/log.html')
+def logHTML():
+	return ds['log'].html
 
 @app.route('/video')
 def video():

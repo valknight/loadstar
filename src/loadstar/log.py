@@ -66,7 +66,15 @@ class Log():
 		l = ''
 		for m in self.logQueue:
 			if m.level is not Severity.DEBUG:
-				l = '{}\n{}'.format(l, m)
+				l = '{}{}'.format(l, m)
+		return l
+	
+	@property
+	def html(self):
+		l = ''
+		for m in self.logQueue:
+			if m.level is not Severity.DEBUG:
+				l = '{}<br>{}'.format(m, l)
 		return l
 
 
