@@ -37,7 +37,6 @@ def video():
 
 def gen():
 	while True:
-		print(ds['frame'])
 		ret, jpeg = cv2.imencode('.jpg', ds['frame'])
 		frame = jpeg.tobytes()
 		yield (b'--frame\r\nContent-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
@@ -45,6 +44,7 @@ def gen():
 def start(d):
 	global ds
 	ds = d
+	app.config['TEMPLATES_AUTO_RELOAD'] = True
 	app.run()
 
 if __name__ == '__main__':
