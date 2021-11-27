@@ -1,14 +1,22 @@
 <html>
-	<head>
-		<link rel="stylesheet", static_url_path="", href="{{ url_for('static', filename='css/main.css') }}">
-	</head>
-	<body>
-		<div><span class="cm" title="LoadStar">LoadStar</span></div>
-		<div><span class="cm cm-medium" title="a tool for speedrunning Cooking Mama: Cookstar">a tool for speedrunning Cooking Mama: Cookstar</span></div>
-		<hr>
-		<div style="padding:20px;background-color:white;border-radius:5px">
-			<p class="cm cm-small" title="live preview">live preview</p>
-			<img src="{{ url_for('video') }}" width="30%">
-		</div>
-	</body>
+
+<head>
+    <link rel="stylesheet" , static_url_path="" , href="{{ url_for('static', filename='css/main.css') }}">
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</head>
+
+<body>
+    <div><span class="cm" title="LoadStar">LoadStar</span></div>
+    <div><span class="cm cm-medium" title="a tool for speedrunning Cooking Mama: Cookstar">a tool for speedrunning Cooking Mama: Cookstar</span></div>
+    <hr>
+    <div class="video-playback-container">
+        <p class="cm cm-small" title="live preview">live preview</p>
+        <img src="{{ url_for('video') }}" width="100%">
+    </div>
+    <div class="control-panel">
+
+    </div>
+
+</body>
+
 </html>
