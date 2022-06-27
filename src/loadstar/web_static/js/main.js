@@ -54,5 +54,5 @@ function updateStats() {
 
 window.onload = function() {
     window.logInterval = setInterval(updateLog, 500);
-    window.statsInterval = setInterval(updateStats, 250);
+    window.statsInterval = setInterval(updateStats, 1000);
 }

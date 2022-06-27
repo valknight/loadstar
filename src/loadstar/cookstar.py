@@ -16,7 +16,7 @@ class Cookstar():
         self.fps = FPSCounter()
         self.finder = CamFinder()
         self.loading = False
-        self.console_enabled = False
+        self.console_enabled = True
         self.ui = ConsoleUI()
         self.lastCheckLoad = False
         self.frame = None
@@ -95,8 +95,8 @@ class Cookstar():
             del frame
             preview = cv2.resize(grayVersion, (320, 180))
             self.frame = preview
-            cv2.imshow('Current loading colour {} with range {}'.format(
-                self.loadingColour, self.colourRange), preview)
+            #cv2.imshow('Current loading colour {} with range {}'.format(
+            #    self.loadingColour, self.colourRange), preview)
             # Advance the frame counter!
             self.frameTimer += 1
             # if it worked, we're on a working camera!!!!!

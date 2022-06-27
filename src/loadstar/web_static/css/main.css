@@ -111,6 +111,12 @@ code {
 
 .log-panel {
     right: 415px;
+    bottom: -250px;
+    width: 400px;
+}
+
+.log-panel:hover {
+    bottom: 0px;
 }
 
 .net-display-box {
@@ -120,6 +126,7 @@ code {
 
 .control-panel-header {
     font-size: 14px;
+    width: 500px;
 }
 
 .control-panel-option {

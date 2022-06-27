@@ -28,14 +28,8 @@ class ConsoleUI():
         else:
             click.echo(click.style("Not loading!", fg='green'))
         click.echo(
-            "press 'b' during a loading screen to cali(b)rate loading screens.")
-        click.echo("press 'q' to quit")
-        click.echo("press 'd' to go to the last camera ID")
-        click.echo("press 'a' to go to the next camera")
-        click.echo("press 'o' to reduce the frame interval for accuracy")
-        click.echo("press 'p' to increase the frame interval for performance")
-        click.echo(
             'frame interval (o to reduce, p to increase): {}'.format(frameInterval))
         click.echo(
             'loading shade (b to calibrate): {}'.format(loadingColour))
+        click.echo(click.style("Open configuration panel: http://127.0.0.1:10000/", bold=True))
         click.echo('fps: {}'.format(fps))

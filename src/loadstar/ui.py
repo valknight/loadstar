@@ -6,6 +6,7 @@ import webbrowser
 import time
 import io
 import cv2
+import logging
 import asyncio
 import sys
 
@@ -76,6 +77,8 @@ def action(actionCommand: str):
 def start(d):
     global ds
     ds = d
+    log = logging.getLogger('werkzeug')
+    log.setLevel(logging.WARNING)
     app.config['TEMPLATES_AUTO_RELOAD'] = True
     app.run(port=10000)
 
