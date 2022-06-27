@@ -1,4 +1,5 @@
 # Import necessary libraries
+import json
 from re import T
 from flask import Flask, render_template, Response, send_file, jsonify, make_response
 import threading
@@ -9,6 +10,9 @@ import cv2
 import logging
 import asyncio
 import sys
+
+lastFrame = None
+lastFrameTime = 0
 
 # create the Flask app
 app = Flask(__name__, template_folder='web',
@@ -24,14 +28,20 @@ def index():
 
 @app.route('/stats.json')
 def stats():
-    return jsonify({
-        'fps': ds['fps'],
-        'loading': ds['loading'],
-        'capturing': ds['capturing'],
-        'frameInterval': ds['frameInterval'],
-        'loadingColour': ds['loadingColour'],
-        'queuedAction': ds.get('action')
-    })
+    try:
+        return jsonify({
+            'fps': ds['fps'],
+            'loading': ds['loading'],
+            'capturing': ds['capturing'],
+            'frameInterval': ds['frameInterval'],
+            'loadingColour': ds['loadingColour'],
+            'queuedAction': ds.get('action'),
+            'starting': False
+        })
+    except KeyError:
+        return jsonify({
+            'starting': True
+        })
 
 
 @app.route('/log.json')
@@ -64,10 +74,17 @@ def actionRoute(actionCommand):
 
 
 def gen():
+    global lastFrame
+    global lastFrameTime
     while True:
-        ret, jpeg = cv2.imencode('.jpg', ds['frame'])
-        frame = jpeg.tobytes()
-        yield (b'--frame\r\nContent-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
+        # This caps us to only only encode at a max of 24FPS, reducing CPU usage especially with multiple pages open
+        if time.time() - lastFrameTime > (1/24):
+            ret, jpeg = cv2.imencode('.jpg', ds['frame'])
+            lastFrame = jpeg.tobytes()
+            lastFrameTime = time.time()
+            yield (b'--frame\r\nContent-Type: image/jpeg\r\n\r\n' + lastFrame + b'\r\n\r\n')
+        else:
+            time.sleep(1/24)
 
 
 def action(actionCommand: str):

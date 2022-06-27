@@ -2,6 +2,7 @@ import cv2
 import livesplit
 import click
 import sys
+import time
 from loadstar.fps import FPSCounter
 from loadstar.console import ConsoleUI
 from loadstar.camera import CamFinder, NoMoreCamerasException
@@ -15,8 +16,9 @@ class Cookstar():
         self._cam = None
         self.fps = FPSCounter()
         self.finder = CamFinder()
+        self.wasPaused = False
         self.loading = False
-        self.console_enabled = True
+        self.console_enabled = False
         self.ui = ConsoleUI()
         self.lastCheckLoad = False
         self.frame = None
@@ -24,8 +26,9 @@ class Cookstar():
         self.ds = dict()
         self.ds['log'] = Log() 
 
-        # true black. reset this with "b" if your capture card is different.
-        self.loadingColour = 0
+        # this is black enough for most capture cards, you shouldn't need to calibrate this!
+        # if you DO need to regularly calibrate, that's a good sign the colours are off in your capture card
+        self.loadingColour = 20
         # allow two either side of the loadingColour (IE: if loading colour is 3, and range is 2, loading colours are defined as between 1 and 5 inclusive)
         self.colourRange = 10
 
@@ -113,10 +116,14 @@ class Cookstar():
         try:
             if self.loading:
                 self.livesplit.pauseGameTimer()
-                self.ds['log'] = self.ds['log'].info('pausing game timer')
+                if not self.wasPaused:
+                    self.ds['log'] = self.ds['log'].info('pausing game timer')
+                    self.wasPaused = True
             else:
                 self.livesplit.startGameTimer()
-                self.ds['log'] = self.ds['log'].info('resuming game timer')
+                if self.wasPaused:
+                    self.ds['log'] = self.ds['log'].info('resuming game timer')
+                    self.wasPaused = False
             if not self.ds.get('livesplit_connected'):
                 self.ds['log'] = self.ds['log'].info('reconnected to livesplit!')
             self.ds['livesplit_connected'] = True
@@ -175,6 +182,7 @@ def start(ds):
         ds['loading'] = cookstar.loading
         ds['frameInterval'] = cookstar.frameInterval
         ds['loadingColour'] = cookstar.loadingColour
+        time.sleep(1/120)
 
 if __name__ == '__main__':
     start(dict())
