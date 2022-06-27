@@ -18,7 +18,7 @@ class Cookstar():
         self.finder = CamFinder()
         self.wasPaused = False
         self.loading = False
-        self.console_enabled = False
+        self.console_enabled = True
         self.ui = ConsoleUI()
         self.lastCheckLoad = False
         self.frame = None
@@ -162,6 +162,7 @@ class Cookstar():
         self.fps.end()
 
 def start(ds):
+    print('Starting capture system...')
     cookstar = Cookstar()
     cookstar.ds = ds
     if ds.get('hide_console', False):

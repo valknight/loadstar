@@ -1,4 +1,4 @@
-
+import time
 import click
 
 
@@ -12,9 +12,12 @@ class ConsoleUI():
         self.showInputs = showInputs
 
     def loop(self, loading: bool, fps: int, loadingColour: int, frameInterval: int):
-        self.displayFrame += 1
-        if self.displayFrame >= self.display_interval:
-            self.displayFrame = 0
+        # We use frame interval here to refer to the ideal frame interval if running at 10FPS
+        # Obviously on some systems this is higher, some lower
+        # So we use this to calculate the time delta, and if we've poassed the ideal interval
+        assumedFps = 10
+        if time.time() - self.displayFrame >= (1/assumedFps) * self.display_interval: # Assuming running at 10FPS
+            self.displayFrame = time.time()
             self.output(loading, fps, loadingColour, frameInterval)
 
     def forceToRender(self):
@@ -28,8 +31,8 @@ class ConsoleUI():
         else:
             click.echo(click.style("Not loading!", fg='green'))
         click.echo(
-            'frame interval (o to reduce, p to increase): {}'.format(frameInterval))
+            'frame interval: {}'.format(frameInterval))
         click.echo(
-            'loading shade (b to calibrate): {}'.format(loadingColour))
+            'loading shade: {}'.format(loadingColour))
         click.echo(click.style("Open configuration panel: http://127.0.0.1:10000/", bold=True))
         click.echo('fps: {}'.format(fps))

@@ -4,10 +4,10 @@ import webbrowser
 import sys
 import time
 from loadstar.log import Log
-from multiprocessing import Process, Manager
+from multiprocessing import Process, Manager, freeze_support
 
 if __name__ == '__main__':
-    
+    freeze_support()
     # create our Manager
     manager = Manager()
     # create our datastore

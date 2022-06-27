@@ -4,4 +4,6 @@ Pipfile.lock
 dist/
 *.egg-info
 src/tmp/*
-.vscode/    
+.vscode/
+src/build/*
+src/dist/*

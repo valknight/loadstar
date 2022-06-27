@@ -5,6 +5,7 @@ from flask import Flask, render_template, Response, send_file, jsonify, make_res
 import threading
 import webbrowser
 import time
+import os
 import io
 import cv2
 import logging
@@ -13,10 +14,15 @@ import sys
 
 lastFrame = None
 lastFrameTime = 0
+if getattr(sys, 'frozen', False):
+    templatesDir = os.getcwd() + '/web'
+    staticDir = os.getcwd() + '/web_static'
+else:
+    templatesDir = 'web'
+    staticDir = 'web_static'
 
 # create the Flask app
-app = Flask(__name__, template_folder='web',
-            static_url_path="/static", static_folder='web_static')
+app = Flask(__name__, template_folder=templatesDir, static_folder=staticDir, static_url_path="/static")
 
 ds = None
 
