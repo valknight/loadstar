@@ -28,9 +28,9 @@ class Cookstar():
 
         # this is black enough for most capture cards, you shouldn't need to calibrate this!
         # if you DO need to regularly calibrate, that's a good sign the colours are off in your capture card
-        self.loadingColour = 20
+        self.loadingColour = 10
         # allow two either side of the loadingColour (IE: if loading colour is 3, and range is 2, loading colours are defined as between 1 and 5 inclusive)
-        self.colourRange = 10
+        self.colourRange = self.loadingColour
 
         # Performance / Accuracy
         # max = 100, min = 1
