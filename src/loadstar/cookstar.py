@@ -16,7 +16,7 @@ class Cookstar():
         self.fps = FPSCounter()
         self.finder = CamFinder()
         self.loading = False
-        self.console_enabled = True
+        self.console_enabled = False
         self.ui = ConsoleUI()
         self.lastCheckLoad = False
         self.frame = None
@@ -125,28 +125,33 @@ class Cookstar():
                 self.ds['log'] = self.ds['log'].warn("failed to connect to LiveSplit.server! Cannot pause - check it's running.")
                 self.ds['livesplit_connected'] = False
         key = cv2.waitKey(1)
+        action = self.ds.get('action')
+        if action is not None:
+            self.ds['log'] = self.ds['log'].info('consumed action: {}'.format(action))
+            print('consumed action: {}'.format(action))
         # TODO: Replace with web commands!
-        if key & 0xFF == ord('q'):
+        if key & 0xFF == ord('q') or action == 'quit':
             self.markCamAsBorked()
             sys.exit(0)
-        if key & 0xFF == ord('d'):
+        if key & 0xFF == ord('d') or action == 'nextCam':
             self.finder.camDirectionForward = True
             self.markCamAsBorked()
-        if key & 0xFF == ord('a'):
+        if key & 0xFF == ord('a') or action == 'prevCam':
             self.finder.camDirectionForward = False
             self.markCamAsBorked()
-        if key & 0xFF == ord('o'):
+        if key & 0xFF == ord('o') or action == 'lowerInterval':
             self.frameInterval -= 1
             self.ui.forceToRender()
-        if key & 0xFF == ord('p'):
+        if key & 0xFF == ord('p') or action == 'higherInterval':
             self.frameInterval += 1
             self.ui.forceToRender()
-        if key & 0xFF == ord('b'):
+        if key & 0xFF == ord('b') or action == 'calibrate':
             self.loadingColour = int(grayVersion[0, 0])
             self.ui.forceToRender()
             cv2.destroyAllWindows()
         if self.lastCheckLoad != self.loading:  # SOMETHING CHANGED ! Refresh UI now.
             self.ui.forceToRender()
+        self.ds['action'] = None
         self.fps.end()
 
 def start(ds):

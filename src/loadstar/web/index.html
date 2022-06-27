@@ -9,19 +9,20 @@
     <div><span class="cm" title="LoadStar">LoadStar</span></div>
     <div><span class="cm cm-medium" title="a tool for speedrunning Cooking Mama: Cookstar">a tool for speedrunning Cooking Mama: Cookstar</span></div>
     <hr>
-    <div class="video-playback-container">
+    <div id="videoPlaybackContainer" class="video-playback-container">
         <p class="cm cm-small" title="live preview">live preview</p>
         <img id="player" src="#" width="100%">
     </div>
-    <div class="control-panel panel">
+    <div id="controlPanelContainer" class="control-panel panel">
         <h1 class="control-panel-header">control panel</h1>
-        <div class="net-display-box">
+        <div id="controlPanel" class="net-display-box">
             <ul>
-                <li><a class="control-panel-option" onclick="calibrate()" href="#">calibrate load</a></li>
-                <li><a class="control-panel-option" onclick="nextCam()" href="#">next camera</a></li>
-                <li><a class="control-panel-option" onclick="prevCam()" href="#">previous camera</a></li>
-                <li><a class="control-panel-option" onclick="lowerInterval()" href="#">lower frame interval</a></li>
-                <li><a class="control-panel-option" onclick="higherInterval()" href="#">higher frame interval</a></li>
+                <li><a class="control-panel-option" onclick="sendAction('calibrate')" href="#">calibrate load</a></li>
+                <li><a class="control-panel-option" onclick="sendAction('nextCam')" href="#">next camera</a></li>
+                <li><a class="control-panel-option" onclick="sendAction('prevCam')" href="#">previous camera</a></li>
+                <li><a class="control-panel-option" onclick="sendAction('lowerInterval')" href="#">lower frame interval</a></li>
+                <li><a class="control-panel-option" onclick="sendAction('higherInterval')" href="#">higher frame interval</a></li>
+                <li><a class="control-panel-option" onclick="quit()" href="#">quit</a></li>
             </ul>
             <b>some notes.</b>
             <p>A frame interval of 2 is recommended for most users. Setting it too high might cause issues in detecting your loads!</p>
@@ -32,11 +33,11 @@
             <p>A good rule of thumb is that you've probably done it wrong if your <code>loadingColour</code> goes above 10.</p>
         </div>
     </div>
-    <div class="stats-panel panel">
+    <div id="statsPanelContainer" class="stats-panel panel">
         <h1 class="control-panel-header">stats panel</h1>
         <div id="stats-box" class="net-display-box"></div>
     </div>
-    <div class="log-panel panel">
+    <div id="logPanelContainer" class="log-panel panel">
         <h1 class="control-panel-header">log panel</h1>
         <div id="log-box" class="net-display-box"></div>
     </div>

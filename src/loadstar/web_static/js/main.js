@@ -5,6 +5,23 @@ function getStats() {
     return JSON.parse(req.responseText);
 }
 
+function sendAction(action, callback) {
+    var req = new XMLHttpRequest();
+    req.open('GET', '/action/' + action, false);
+    req.send(null);
+    callback();
+}
+
+function quit() {
+    document.getElementById('controlPanel').innerHTML = 'Shutting down - goodbye!';
+    document.getElementById('statsPanelContainer').style.display = 'none';
+    document.getElementById('logPanelContainer').style.display = 'none';
+    document.getElementById('videoPlaybackContainer').style.display = 'none';
+    clearInterval(window.logInterval);
+    clearInterval(window.statsInterval);
+    sendAction("quit", function() {});
+}
+
 function getLog() {
     var req = new XMLHttpRequest();
     req.open('GET', '/log.html', false);
@@ -36,6 +53,6 @@ function updateStats() {
 }
 
 window.onload = function() {
-    logInterval = setInterval(updateLog, 500);
-    logInterval = setInterval(updateStats, 250);
+    window.logInterval = setInterval(updateLog, 500);
+    window.statsInterval = setInterval(updateStats, 250);
 }
